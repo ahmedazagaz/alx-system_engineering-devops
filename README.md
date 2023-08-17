@@ -1,2 +1,1 @@
-My first README
-
+Shell Basics Readme
