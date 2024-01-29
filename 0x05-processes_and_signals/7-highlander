@@ -1,15 +1,7 @@
 #!/usr/bin/env bash
-#script that gives you information about the school file.
-if [ -e school ]; then
-  echo "school file exists"
-  if [ -s school ]; then
-    echo "school file is not empty"
-    if [ -f school ]; then
-      echo "school is a regular file"
-    fi
-  else
-    echo "school file is empty"
-  fi
-else
-  echo "school file does not exist"
-fi
+# script that displays To infinity and beyond indefinitely avoiding signals.
+trap 'echo "I am invincible!!!"' SIGTERM
+while true; do
+    echo "To infinity and beyond"
+    sleep 2
+done
