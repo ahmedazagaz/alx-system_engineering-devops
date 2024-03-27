@@ -1,4 +1,3 @@
 #!/usr/bin/env bash
-# Start apache server directly
-echo "ServerName localhost" >> /etc/apache2.conf
+# Fixing the server
 service apache2 start
