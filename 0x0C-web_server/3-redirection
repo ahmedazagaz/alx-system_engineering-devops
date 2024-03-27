@@ -1,30 +1,31 @@
 #!/usr/bin/env bash
-#Install configure start the server
-apt-get update
-apt-get -y install nginx
-sudo ufw allow 'Nginx HTTP'
-mkdir -p /var/www/html/
-sudo chmod -R 755 /var/www
-echo 'Hello World!' > /var/www/html/index.html
-SERVER_CONFIG=\
-"server {
-	listen 80 default_server;
-	listen [::]:80 default_server;
-	root /var/www/html;
-	index index.html index.htm index.nginx-debian.html;
-	server_name _;
-	location / {
-		try_files \$uri \$uri/ =404;
-	}
-	if (\$request_filename ~ redirect_me){
-		rewrite ^ https://sketchfab.com/bluepeno/models permanent;
-	}
-}"
+# Update package information
+sudo apt-get update
 
-bash -c "echo -e '$SERVER_CONFIG' > /etc/nginx/sites-enabled/default"
+# Install Nginx
+sudo apt-get install -y nginx
 
-if [ "$(pgrep -c nginx)" -le 0 ]; then
-	service nginx start
-else
-	service nginx restart
-fi
+# Create an HTML file with "Hello World!" content
+echo "Hello World!" > /var/www/html/index.html
+
+# Create a new Nginx configuration file
+echo "server {
+    listen 80;
+    listen [::]:80;
+
+    root /var/www/html;
+    index index.html;
+
+    server_name _;
+
+    location /redirect_me {
+        return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
+    }
+
+    location / {
+        try_files \$uri \$uri/ =404;
+    }
+}" | sudo tee /etc/nginx/sites-available/default
+
+# Restart Nginx service to apply changes
+sudo service nginx restart
