@@ -1,1 +1,17 @@
-ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDhRkoJ8H8OoKUDzev41pG+VuhHFTDUI3TLA4l91bqXNT468sNSK2oaRT/5HD29iXLCgkfeOiK9DQ6snzzUf7kB4/Wrc4avyJNTJ3rd7o6Vdk3INMvvWNsZZmP2VE2SMHdoycBGfS+ShEZvVDuzw5CwezdCwgYZszwbN9YQkC/2PQxo+qhI5UTW2ZmsUMoEVSKxnIRtlZvHljAUlgTwiYoKpajRy8p8NvPbhwuYISAwQOZjIRY7PLAtsGX/ShWE6TsXXUjCHNVN3O1k5vBsaqIufFa65BqDHH81x2BzXLSb0okHiNH2G7N7MUhmgsMw/P8jPXpuyHIXvdySjNS7SGq0hXCO0pYcgb2Ul3FtcSPcBBmjBiH+Gwuj0AoFK/wEWz0hsRzK8NZe6pj7CLpCN6O+V6bE63NaQ4siT7tnfqu3ioZIXSldAV+klbUqgsDctbzirxFAuUbrP/yOBtmUGvl+f2ZCm7mzfOY437ITcdVX/zT3rGiAtLKDU5aFCp1Gno0= root@94567757b40c
+#!/bin/bash
+
+# Check for the presence of a valid public key argument
+if [ $# -eq 0 ]; then
+  echo "Usage: $0 <public_key>"
+  exit 1
+fi
+
+# Define the server SSH connection details
+server_user="ubuntu"
+server_ip="18.207.233.114"
+
+# SSH into the server and append the provided public key to the authorized_keys file
+ssh_command="echo '$1' >> ~/.ssh/authorized_keys"
+ssh "$server_user@$server_ip" "$ssh_command"
+
+echo "Public key added to the server's authorized_keys file."
