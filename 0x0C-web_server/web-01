@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# cmd Server login .
+
+# Setting SSH
+eval $("ssh-agent")
+
+# Path to identityFile
+ssh-add ~/.ssh/id_rsa
+
+# Username & IP Address 
+ssh ubuntu@54.197.102.203
