@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# Create SSH client configuration file
+cat <<EOF > ~/.ssh/config
+Host *
+  IdentityFile ~/.ssh/school
+  PasswordAuthentication no
+EOF
