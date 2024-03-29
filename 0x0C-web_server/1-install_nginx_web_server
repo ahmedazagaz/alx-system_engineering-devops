@@ -1,23 +1,27 @@
 #!/usr/bin/env bash
-# Install and configure Nginx web server on Ubuntu
+# Update package information
+sudo apt-get update
 
-apt-get update
-apt-get install -y nginx
+# Install Nginx
+sudo apt-get install -y nginx
 
-#Create simple HTML page
-echo "Hello World!" > /usr/share/nginx/html/index.html
-echo "Hello world" > /var/www/html/index.html
-#Make sure Nginx is listening on port 80
+# Create an HTML file with "Hello World!" content
+echo "Hello World!" > /var/www/html/index.html
+
+# Create a new Nginx configuration file
 echo "server {
-    listen 80 ;
+    listen 80;
     listen [::]:80;
+
     root /var/www/html;
     index index.html;
-    server_name _;
-    location / {
-        try_files $uri $uri/ =404;
-    }
-}" > /etc/nginx/sites-available/default
 
-#Restart Nginx
-service nginx restart
+    server_name _;
+
+    location / {
+        try_files \$uri \$uri/ =404;
+    }
+}" | sudo tee /etc/nginx/sites-available/default
+
+# Restart Nginx service to apply changes
+sudo service nginx restart
