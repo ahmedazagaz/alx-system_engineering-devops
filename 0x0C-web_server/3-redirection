@@ -1,31 +1,39 @@
 #!/usr/bin/env bash
-# Update package information
-sudo apt-get update
 
-# Install Nginx
-sudo apt-get install -y nginx
+# Configures a new Ubuntu machine by installing
+# Nginx where it should be listening on port 80
+# Serve a page that would return a Hello World string
+# Configure redirection from /redirect_me to another page with a 301 status
 
-# Create an HTML file with "Hello World!" content
-echo "Hello World!" > /var/www/html/index.html
 
-# Create a new Nginx configuration file
-echo "server {
-    listen 80;
-    listen [::]:80;
+# Update and install Nginx
+echo -e "Updating and installing Nginx.\n"
+sudo apt-get update -y -qq && \
+sudo apt-get install nginx -y
 
-    root /var/www/html;
-    index index.html;
+echo -e "\nSetting up some minor stuff.\n"
 
-    server_name _;
+# Start nginx service
+sudo service nginx start
 
-    location /redirect_me {
-        return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
-    }
+# Allow Nginx on firewall
+sudo ufw allow 'Nginx HTTP'
 
-    location / {
-        try_files \$uri \$uri/ =404;
-    }
-}" | sudo tee /etc/nginx/sites-available/default
+# Give the user ownership to website files for easy editing
+sudo chown -R "$USER":"$USER" /var/www/html
+sudo chmod -R 755 /var/www
 
-# Restart Nginx service to apply changes
+# Backup default index
+cp /var/www/html/index.nginx-debian.html /var/www/html/index.nginx-debian.html.bckp
+
+# Create new index
+echo -e "Hello World!" > /var/www/html/index.nginx-debian.html
+
+# Configure redirection from /redirect_me to another page with a 301 status
+sudo sed -i '/location \/ {/a \       location /redirect_me { \n               return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4; \n       }' /etc/nginx/sites-available/default
+
+# Restart Nginx
 sudo service nginx restart
+
+echo -e "\nCompleted.\n"
+
