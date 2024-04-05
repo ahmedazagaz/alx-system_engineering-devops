@@ -1,28 +1,34 @@
 #!/usr/bin/env bash
-# Customizing a 404-error_page
+# custom configuration 
 
-# Updating Packages before performing installations
 sudo apt-get update
 sudo apt-get install -y nginx
 
-# Creating an index.html page
-echo "Hello World!" | sudo tee /var/www/html/index.html
+# Create an HTML file with "Hello World!" content
+echo "Hello World!" > /var/www/html/index.html
+echo "Ceci n'est pas une page" > /var/www/html/404.html
 
-# Performing a "moved permanently redirection" (301)
-new_string="server_name _;\n\trewrite ^\/redirect_me https:\/\/github.com\/besthor permanent;"
-sudo sed -i "s/server_name _;/$new_string/" /etc/nginx/sites-enabled/default
+# Create a new Nginx configuration file
+echo "server {
+     listen 80;
+     listen [::]:80;
 
-# Creating a 404 Custom error page
-echo "Ceci n'est pas une page" | sudo tee /var/www/html/404.html
-new_string="listen 80 default_server;\n\terror_page 404 \/404.html;\n\tlocation = \/404.html {\n\t\troot \/var\/www\/html;\n\t\tinternal;\n\t}"
+     root /var/www/html;
+     index index.html;
 
-sudo sed -i "s/listen 80 default_server;/$new_string/" /etc/nginx/sites-enabled/default
+     server_name _;
 
-# Creating an HTTP response header
-sudo sed -i "/server_name _/a add_header X-Served-By $HOSTNAME;" /etc/nginx/sites-enabled/default
+     location /redirect_me {
+     	return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
+     }
 
-# Testing configurations for syntax errors
-sudo nginx -t
+     error_page 404 /404.html;
 
-# Restart nginx after implementing changes
+     location / {
+	 try_files \$uri \$uri/ =404;
+     }
+}" | sudo tee /etc/nginx/sites-available/default
+
+sudo sed -i "/server_name / a  add_header X-Served-By $HOSTNAME;" /etc/nginx/sites-enabled/default
+# Restart Nginx service to apply changes
 sudo service nginx restart
