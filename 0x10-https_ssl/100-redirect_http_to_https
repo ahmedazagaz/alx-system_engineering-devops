@@ -42,7 +42,7 @@ frontend charef.tech
 frontend ahmedazagaz.tech-frontend-https
         bind *:443 ssl crt /etc/haproxy/certs/www.ahmedazagaz.tech.pem
         http-request set-header X-Forwarded-Proto https
-        default_backend charef.tech_backend
+        default_backend ahmedazagaz.tech_backend
 
 backend ahmedazagaz.tech_backend
         timeout connect 3000
