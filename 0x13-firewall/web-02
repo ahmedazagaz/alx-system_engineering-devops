@@ -1,0 +1,10 @@
+erver-01 login commands
+
+# Setting up the SSH agent
+eval $("ssh-agent")
+
+# Path to identityFile
+ssh-add ~/.ssh/id_rsa
+
+# Username and IP Address 
+ssh ubuntu@52.87.220.244
