@@ -1,4 +1,5 @@
-erver-01 login commands
+#!/usr/bin/env bash
+# Server login commands
 
 # Setting up the SSH agent
 eval $("ssh-agent")
